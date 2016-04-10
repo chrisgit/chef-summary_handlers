@@ -1,0 +1,19 @@
+Cookbook Summary Report
+=======================
+Loaded Recipes
+==============
+<% @loaded_recipes.each do |recipe| %>
+<%= recipe %>
+<%end%>
+
+Unused Recipes (not loaded)
+===========================
+<% @unused_recipes.each do |recipe| %>
+<%= recipe %>
+<%end%>
+
+Loaded recipes with no resources (might have include_recipe)
+============================================================
+<% @recipes_without_resources.each do |recipes| %>
+<%= recipes %>
+<%end%>
