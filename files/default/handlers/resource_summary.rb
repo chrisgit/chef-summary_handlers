@@ -22,7 +22,7 @@ class Chef
         end
 
         def remove_resources_from_this_cookbook(report_data)
-            handler_cookbook = report_data.select{|resource| resource.name == self.class.to_s}
+            handler_cookbook = report_data.select{|resource| resource.respond_to?(:handler_class) && resource.handler_class == self.class.to_s}
             return report_data unless handler_cookbook[0]
             report_data.reject  {|resource| resource.cookbook_name == handler_cookbook[0].cookbook_name}
         end

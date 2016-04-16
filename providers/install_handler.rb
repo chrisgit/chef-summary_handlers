@@ -2,7 +2,7 @@
 # Cookbook Name:: summary_handlers
 # Providers:: install_handler
 #
-use_inline_resources
+use_inline_resources if defined?(use_inline_resources)
 
 def whyrun_supported?
   true
