@@ -1,20 +1,6 @@
-
+=======================
 Cookbook Summary Report
 =======================
-Loaded Recipes
-==============
-<% @loaded_recipes.each do |recipe| %>
-<%= recipe %>
-<%end%>
-
-Unused Recipes (not loaded)
-===========================
-<% @unused_recipes.each do |recipe| %>
-<%= recipe %>
-<%end%>
-
-Loaded recipes with no resources (might have include_recipe)
-============================================================
-<% @recipes_without_resources.each do |recipes| %>
-<%= recipes %>
+<% @all_recipes.each do |recipe| %>
+<%= "%-40s (%s, %s)" % [recipe[:cookbook], recipe[:loaded] ? 'loaded' : 'not loaded', recipe[:resources] ? 'has resources' : 'no resources'] %>
 <%end%>

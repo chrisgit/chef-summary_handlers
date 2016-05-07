@@ -16,9 +16,9 @@ class Chef
             filtered_resources = remove_resources_from_this_cookbook(resources_to_report)
             filtered_resources = apply_user_filter(filtered_resources, user_filter)
 
-            report_data = ::Handler::ResourceSummary::DataCollector.create(report_type, filtered_resources).format_data
-            report = ::Handler::ResourceSummary::ReportGenerator.create(report_format, report_type, report_data).generate
-            ::Handler::ResourceSummary::ReportWriter.create(report_writer, report).write
+            report_data = ::Handler::ResourceSummary::DataFormatter.format(report_type, filtered_resources)
+            report = ::Handler::ResourceSummary::ReportGenerator.generate(report_format, report_type, report_data)
+            ::Handler::ResourceSummary::ReportWriter.output(report)
         end
 
         def remove_resources_from_this_cookbook(report_data)
@@ -49,119 +49,44 @@ end
 module Handler
     module ResourceSummary
     # Take the report resources and change the structure for reporting :by_cookbook or :by_type
-        class DataCollector
-
-            def initialize(report_data)
-                @report_data = report_data
+        class DataFormatter
+            def  self.format(report_type, report_data)
+                return report_data.group_by {|r| "#{r.cookbook_name}::#{r.recipe_name}"} if report_type == :by_cookbook
+                report_data.group_by {|r| "#{r.resource_name}::#{r.cookbook_name}::#{r.recipe_name}" }                
             end
-
-            def  self.create(report_type, report_data)
-                return DataCollector.new unless SUPPORTED_TYPES.keys.include?(report_type)
-                SUPPORTED_TYPES[report_type].new report_data
-            end
-
-            def format_data
-            end
-        end
-
-        # Structure the hash for cookbook => recipe => resources
-        class DataCollectorCookbook < DataCollector
-            def format_data
-                formatted_data = Hash.new()
-                @report_data.each do |resource|
-                    formatted_data[resource.cookbook_name] = {} unless formatted_data.key?(resource.cookbook_name)
-                    formatted_data[resource.cookbook_name][resource.recipe_name] = [] unless formatted_data[resource.cookbook_name].key?(resource.recipe_name)
-                    formatted_data[resource.cookbook_name][resource.recipe_name] << resource
-                end
-                formatted_data
-            end
-        end
-
-        # Structure the hash for resource type => cookbook => recipe => resources (matching type)
-        class DataCollectorType < DataCollector
-            def format_data
-                formatted_data = Hash.new()
-                @report_data.each do |resource|
-                    formatted_data[resource.resource_name] = {} unless formatted_data.key?(resource.resource_name)
-                    formatted_data[resource.resource_name][resource.cookbook_name] =  {} unless formatted_data[resource.resource_name].key?(resource.cookbook_name)
-                    formatted_data[resource.resource_name][resource.cookbook_name][resource.recipe_name] =  [] unless formatted_data[resource.resource_name][resource.cookbook_name].key?(resource.recipe_name)
-                    formatted_data[resource.resource_name][resource.cookbook_name][resource.recipe_name] << resource
-                end
-                formatted_data
-            end
-        end
-
-        class DataCollector
-            SUPPORTED_TYPES = {:by_cookbook => DataCollectorCookbook, :by_type => DataCollectorType}
         end
 
         # Take data and build report
         class ReportGenerator
 
-            def initialize(report_type = nil, report_data = nil)
-                @report_type = report_type
-                @report_data = report_data
-            end
-
-            # Generate method is factory and also runs one of the generators?
-            def self.create(report_format, report_type, report_data)
-                return ReportGenerator.new unless SUPPORTED_TYPES.keys.include?(report_format)
-                SUPPORTED_TYPES[report_format].new report_type, report_data
-            end
-
-            def generate()
-                # Raise not implimented, leave for time being as will act as Null object
-                ''
-            end
-        end
-
-        # Raw data to JSON
-        class ReportGeneratorJson < ReportGenerator
-            def generate()
-                #@report_data.to_json
-                JSON.pretty_generate(@report_data)
-            end
-        end
-
-        # Raw data to YAML
-        class ReportGeneratorYAML < ReportGenerator
-            def generate()
-                @report_data.to_yaml
-            end
-        end
-
-        # Raw data formatted with Template
-        class ReportGeneratorTemplate < ReportGenerator
             TEMPLATES = {:by_cookbook => 'resource_by_cookbook.erb', :by_type => 'resource_by_type.erb'}
-
-            def generate()
-                template = TEMPLATES[@report_type]
-                report = {:data => @report_data}
+            # Generate method is factory and also runs one of the generators?
+            def self.generate(report_format, report_type, report_data)
+                case report_format
+                    when :template
+                        return generate_template(report_type, report_data)
+                    when :json
+                        return JSON.pretty_generate(report_data)
+                    when :yaml
+                        return report_data.to_yaml
+                end
+            end
+            
+            private
+            def self.generate_template(report_type, report_data)
+                template = TEMPLATES[report_type]
+                report = {:data => report_data}
                 # In Template can call resource.name, resource.updated etc
                 template = ::File.join(File.dirname(__FILE__), 'Templates', template)
                 erb = ::Erubis::Eruby.new(File.read(template))
                 erb.evaluate(report)
-            end
-        end
-
-        class ReportGenerator
-            SUPPORTED_TYPES = {:template => ReportGeneratorTemplate, :json => ReportGeneratorJson, :yaml => ReportGeneratorYAML}
+           end            
         end
 
         # Output report
         class ReportWriter
-            def initialize(report)
-                @report = report
-            end
-
-            def self.create(report_writer, report)
-                ReportWriterStdio.new report
-            end
-        end
-
-        class ReportWriterStdio < ReportWriter
-            def write
-                puts @report
+            def self.output(report)
+                puts report
             end
         end
     end

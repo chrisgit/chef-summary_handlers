@@ -1,16 +1,9 @@
-
+==========================================
 Resource Summary Report (by resource type)
 ==========================================
-<% @data.each_pair do |resource_type, cookbooks| %>
-Type <%= resource_type %>
-<% cookbooks.each_pair do |cookbook, recipes| %>
-    Cookbook <%= cookbook %>
-        Recipes
-<% recipes.each_pair do |recipe, resources| %>
-	        <%= recipe %>
+<% @data.each_pair do |resource_group, resources| %>
+<%= resource_group %>
 <% resources.each do |resource| %>
-	            <%= resource %> <%= resource.updated ? '(updated)' : '' %>
-<% end %>
-<% end %>
+     <%= resource %> <%= resource.updated ? '(updated)' : '' %>
 <% end %>
 <% end %>

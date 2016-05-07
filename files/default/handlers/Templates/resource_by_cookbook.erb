@@ -1,12 +1,9 @@
-
+=====================================
 Resource Summary Report (by cookbook)
 =====================================
-<% @data.each_pair do |cb, recipes| %>
-Cookbook <%= cb %>
-<% recipes.each_pair do |recipe, resources| %>
-  Recipe <%= recipe %>
+<% @data.each_pair do |cookbook_recipe, resources| %>
+<%= cookbook_recipe %>
 <% resources.each do |resource| %>
-	    <%= resource %> <%= resource.updated ? '(updated)' : '' %>
-<% end %>
+<%= "%2s %-45s %s" % ['', resource, resource.updated ? '(updated)' : ''] %>
 <% end %>
 <% end %>
