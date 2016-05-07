@@ -1,7 +1,7 @@
-=======================
-Cookbook Summary Report
-=======================
-<% @all_recipes.each do |recipe| %>
-<%= "%-40s (%s%s)" % [recipe[:cookbook], recipe[:loaded] ? 'loaded' : 'not loaded', recipe[:resource_count]==0 ? '' : ", #{recipe[:updated_count]}/#{recipe[:resource_count]} resources updated"] %>
+=====================
+Recipe Summary Report
+=====================
+<% cookbook_recipes.each do |cookbook_recipe| %>
+<%= "%-40s (%s)" % [cookbook_recipe, is_loaded?(cookbook_recipe) == false ? 'not loaded' : "loaded, #{updated_resource_count(cookbook_recipe)}/#{resource_count(cookbook_recipe)} resources updated"] %>
 <%end%>
 NB: No resources updated or zero resources may mean recipe has Ruby / include_recipe statements

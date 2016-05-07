@@ -4,9 +4,10 @@ maintainer_email 'n/a'
 license          'All rights reserved'
 description      'Installs/Configures some handlers that summerise the Chef run in terms of Resource and Recipe'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '0.2.1'
+version          '0.2.2'
 
 recipe            'summary_handlers', 'Default recipe, will include recipe_summary and resource_summary if the appropriate attributes set.'
+recipe            'summary_handlers::cookbook_summary', 'Will add a handler to provide a cookbook summary at the end of the Chef run.'
 recipe            'summary_handlers::recipe_summary', 'Will add a handler to provide a recipe summary at the end of the Chef run.'
 recipe            'summary_handlers::resource_summary', 'Will add a handler to provide a resource summary at the end of the Chef run.'
 
