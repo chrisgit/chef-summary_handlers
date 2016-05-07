@@ -10,22 +10,30 @@ class Chef
 			def is_loaded?(cookbook_recipe)
 				run_context.loaded_recipes.include?(cookbook_recipe)
 			end
-			
-			def has_resources?(cookbook_recipe)
+
+            def recipe_resource_count(cookbook_recipe)
 				cookbook, recipe = cookbook_recipe.split('::')
-				run_status.all_resources.any? {|r| r.cookbook_name == cookbook && r.recipe_name == recipe}
-			end
-			
+				run_status.updated_resources.count {|r| r.cookbook_name == cookbook && r.recipe_name == recipe}
+            end
+						
+            def recipe_updated_resource_count(cookbook_recipe)
+				cookbook, recipe = cookbook_recipe.split('::')
+                run_status.updated_resources.count {|r| r.cookbook_name == cookbook && r.recipe_name == recipe}
+            end
+                        
 			def summerise_recipe(cookbook, recipe)
+                # Stored as filename, such as default.rb, remove the .rb
 				recipe_name = recipe[:name]
 				recipe_name = File.basename(recipe_name,File.extname(recipe_name))
 				cookbook_recipe = "#{cookbook}::#{recipe_name}"
 				loaded = is_loaded?(cookbook_recipe)
-				contains_resources = has_resources?(cookbook_recipe)
+				resource_count = recipe_resource_count(cookbook_recipe)
+                updated_count = recipe_updated_resource_count(cookbook_recipe)
 				{
 					:cookbook => cookbook_recipe,
 					:loaded => loaded, 
-					:resources => contains_resources
+					:resource_count => resource_count,
+                    :updated_count => updated_count
 				}
 			end
 			

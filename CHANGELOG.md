@@ -3,6 +3,10 @@ summary-handlers CHANGELOG
 
 This file is used to list changes made in each version of the summary-handlers cookbook.
 
+0.2.1
+-----
+- [Chris Sullivan] - Slight change in format of reports
+
 0.2.0
 -----
 - [Chris Sullivan] - Simplify code and change format of reports
