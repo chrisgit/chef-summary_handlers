@@ -3,6 +3,10 @@ summary-handlers CHANGELOG
 
 This file is used to list changes made in each version of the summary-handlers cookbook.
 
+0.2.4
+-----
+- [Chris Sullivan] - Remove Berksfile.lock
+
 0.2.3
 -----
 - [Chris Sullivan] - Added updated only option for resource summary, refactored
