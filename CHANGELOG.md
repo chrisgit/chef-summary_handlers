@@ -3,6 +3,10 @@ summary-handlers CHANGELOG
 
 This file is used to list changes made in each version of the summary-handlers cookbook.
 
+0.2.5
+-----
+- [Chris Sullivan] - Fix FC064 and FC065
+
 0.2.4
 -----
 - [Chris Sullivan] - Remove Berksfile.lock
