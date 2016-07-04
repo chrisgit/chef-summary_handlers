@@ -28,32 +28,32 @@ module Handler
         class ReportGenerator
             
             def initialize(run_status)
-                @run_status = run_status
-                @run_context = run_status.run_context
+				@run_context = run_status.run_context
+				@cookbook_collection = @run_context.cookbook_collection
             end
             
             def cookbooks
-                @run_context.cookbook_collection.keys
+                @cookbook_collection.keys
             end
             
-            def cookbook_recipe_count(cookbook)
-                @run_context.cookbook_collection[cookbook].manifest['recipes'].count
+            def recipes(cookbook)
+                @cookbook_collection[cookbook].manifest['recipes']
             end
             
-            def cookbook_loaded_recipe_count(cookbook)
-                @run_context.loaded_recipes.count {|recipe| recipe.split('::')[0] == cookbook}
+            def loaded_recipes(cookbook)
+                @run_context.loaded_recipes.select {|recipe| recipe.split('::')[0] == cookbook}
             end
             
             def description(cookbook)
-                @run_context.cookbook_collection[cookbook].metadata.description
+                @cookbook_collection[cookbook].metadata.description
             end
             
             def maintainer(cookbook)
-                @run_context.cookbook_collection[cookbook].metadata.maintainer
+                @cookbook_collection[cookbook].metadata.maintainer
             end
             
             def version(cookbook)
-                @run_context.cookbook_collection[cookbook].metadata.version
+                @cookbook_collection[cookbook].metadata.version
             end
             
             # Generate method is factory and also runs one of the generators?

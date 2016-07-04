@@ -3,7 +3,7 @@ Cookbook Summary Report
 =======================
 <% cookbooks.each do |cookbook| %>
 <%= cookbook %> at version <%= version(cookbook) %> (<%= maintainer(cookbook) %>)
-  Contains <%= cookbook_recipe_count(cookbook) %> recipes, <%= cookbook_loaded_recipe_count(cookbook) %> loaded
+  Contains <%= recipes(cookbook).count %> recipes, <%= loaded_recipes(cookbook).count %> loaded
   <%= description(cookbook)[0,76] %>
 
 <%end%>

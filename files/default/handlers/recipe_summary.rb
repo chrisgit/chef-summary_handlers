@@ -34,19 +34,18 @@ module Handler
 				@run_context.loaded_recipes.include?(cookbook_recipe)
 			end
 
-            def resource_count(cookbook_recipe)
+            def resources(cookbook_recipe)
 				cookbook, recipe = cookbook_recipe.split('::')
-				@run_status.all_resources.count {|r| r.cookbook_name == cookbook && r.recipe_name == recipe}
+				@run_status.all_resources.select {|r| r.cookbook_name == cookbook && r.recipe_name == recipe}
             end
 						
-            def updated_resource_count(cookbook_recipe)
+            def updated_resources(cookbook_recipe)
 				cookbook, recipe = cookbook_recipe.split('::')
-                @run_status.updated_resources.count {|r| r.cookbook_name == cookbook && r.recipe_name == recipe}
+                @run_status.updated_resources.select {|r| r.cookbook_name == cookbook && r.recipe_name == recipe}
             end
                         
-			def summerise_recipe(cookbook, recipe)
-                # Stored as filename, such as default.rb, remove the .rb
-				recipe_name = recipe[:name]
+			def cookbook_recipe_shortname(cookbook, recipe)
+                # Recipe name is in format of filename plus extension, i.e. default.rb, therefore remove the .rb
 				recipe_name = File.basename(recipe_name,File.extname(recipe_name))
 				cookbook_recipe = "#{cookbook}::#{recipe_name}"
 			end
@@ -55,7 +54,7 @@ module Handler
                 all_recipes = []
                 @run_context.cookbook_collection.each_pair do |cookbook, cookbook_version|
                     cookbook_version.manifest["recipes"].each do |recipe|
-		                all_recipes << summerise_recipe(cookbook, recipe)
+		                all_recipes << cookbook_recipe_shortname(cookbook, recipe[:name])
                     end
                 end
 				all_recipes
