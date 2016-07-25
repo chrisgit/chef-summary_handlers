@@ -8,7 +8,7 @@ class Chef
         class RecipeSummary < Chef::Handler
 
             def report
-                report = ::Handler::RecipeSummary::ReportGenerator.new(run_status).generate
+                report = ::Handler::RecipeSummary::Report.new(run_status).generate
                 show_report(report)
             end
             
@@ -23,7 +23,7 @@ module Handler
     module RecipeSummary
 
         # Take data and build report
-        class ReportGenerator
+        class Report
             
             def initialize(run_status)
                 @run_status = run_status
@@ -44,10 +44,10 @@ module Handler
                 @run_status.updated_resources.select {|r| r.cookbook_name == cookbook && r.recipe_name == recipe}
             end
                         
-			def cookbook_recipe_shortname(cookbook, recipe)
+			def cookbook_recipe_shortname(cookbook, recipe_name)
                 # Recipe name is in format of filename plus extension, i.e. default.rb, therefore remove the .rb
-				recipe_name = File.basename(recipe_name,File.extname(recipe_name))
-				cookbook_recipe = "#{cookbook}::#{recipe_name}"
+				recipe = File.basename(recipe_name,File.extname(recipe_name))
+				cookbook_recipe = "#{cookbook}::#{recipe}"
 			end
             
             def cookbook_recipes

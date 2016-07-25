@@ -11,7 +11,7 @@ class Chef
     class ResourceSummary < Chef::Handler
 
         def report
-			report = ::Handler::ResourceSummary::ReportGenerator.new(run_status).generate
+			report = ::Handler::ResourceSummary::Report.new(run_status).generate
             show_report(report)
         end
         
@@ -25,9 +25,8 @@ end
 # Supporting methods
 module Handler
     module ResourceSummary
-
         # Take data and build report
-        class ReportGenerator
+        class Report
             
 			TEMPLATES = {:by_cookbook => 'resource_by_cookbook.erb', :by_type => 'resource_by_type.erb'}
 
@@ -60,23 +59,6 @@ module Handler
 			def resources_to_report
 				updated_only ? @run_status.updated_resources.dup : @run_status.all_resources.dup
 			end
-
-			def remove_resources_from_this_cookbook(report_data)
-				handler_cookbook = report_data.select{|resource| resource.respond_to?(:handler_class) && resource.handler_class == Chef::Handler::ResourceSummary.to_s}
-				return report_data unless handler_cookbook[0]
-				report_data.reject  {|resource| resource.cookbook_name == handler_cookbook[0].cookbook_name}
-			end
-
-			def apply_user_filter(report_data, user_filter)
-				return report_data unless user_filter
-				return report_data unless user_filter.class == Proc || user_filter.arity != 1
-				report_data.select {|resource| user_filter.call(resource)}
-			end
-			
-			def  group_data(report_data)
-				return report_data.group_by {|r| "#{r.cookbook_name}::#{r.recipe_name}"} if report_type == :by_cookbook
-				report_data.group_by {|r| "#{r.resource_name}::#{r.cookbook_name}::#{r.recipe_name}" }                
-			end		
 				
 			# Generate method is factory and also runs one of the generators?
 			def generate()
@@ -95,6 +77,23 @@ module Handler
 			end
 				
 			private
+			def remove_resources_from_this_cookbook(report_data)
+				handler_cookbook = report_data.select{|resource| resource.respond_to?(:handler_class) && resource.handler_class == Chef::Handler::ResourceSummary.to_s}
+				return report_data unless handler_cookbook[0]
+				report_data.reject  {|resource| resource.cookbook_name == handler_cookbook[0].cookbook_name}
+			end
+
+			def apply_user_filter(report_data, user_filter)
+				return report_data unless user_filter
+				return report_data unless user_filter.class == Proc || user_filter.arity != 1
+				report_data.select {|resource| user_filter.call(resource)}
+			end
+			
+			def  group_data(report_data)
+				return report_data.group_by {|r| "#{r.cookbook_name}::#{r.recipe_name}"} if report_type == :by_cookbook
+				report_data.group_by {|r| "#{r.resource_name}::#{r.cookbook_name}::#{r.recipe_name}" }                
+			end		
+
 			def generate_template()
 				template = TEMPLATES[report_type]
 				# In Template can call resource.name, resource.updated etc

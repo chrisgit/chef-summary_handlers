@@ -4,7 +4,7 @@ Resource Summary Report (by cookbook)
 <% @data.each_pair do |cookbook_recipe, resources| %>
 <%= cookbook_recipe %>
 <% resources.each do |resource| %>
-<%= "%2s %-45s %s" % ['', resource, resource.updated ? '(updated)' : ''] %>
+<%= " %-9s %-45s" % [resource.updated ? '(updated)' : '', resource] %>
 <% end %>
 
 <% end %>

@@ -9,7 +9,7 @@ class Chef
     class CookbookSummary < Chef::Handler
 
         def report
-            report = ::Handler::CookbookSummary::ReportGenerator.new(run_status).generate
+            report = ::Handler::CookbookSummary::Report.new(run_status).generate
             show_report(report)
         end
         
@@ -25,7 +25,7 @@ module Handler
     module CookbookSummary
 
         # Take data and build report
-        class ReportGenerator
+        class Report
             
             def initialize(run_status)
 				@run_context = run_status.run_context
