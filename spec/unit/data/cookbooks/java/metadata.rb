@@ -1,2 +1,2 @@
-name "java"
-version "0.0.1"
+name 'java'
+version '0.0.1'

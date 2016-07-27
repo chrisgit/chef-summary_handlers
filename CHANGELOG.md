@@ -5,6 +5,10 @@ This file is used to list changes made in each version of the summary-handlers c
 
 0.2.6
 -----
+- [Chris Sullivan] - Applied Rubocop rules to code
+
+0.2.6
+-----
 - [Chris Sullivan] - Re-added unit tests
 
 0.2.5
