@@ -99,8 +99,11 @@ include_recipe 'summary_handlers
 
 Contributing
 ------------
-Branch the source, make the changes, add tests as appropriate, make a pull request.
+Please see [CONTRIBUTING.md][contributor] and read the [CODE_OF_CONDUCT.md][conduct]
 
 License and Authors
 -------------------
 Authors: Chris Sullivan
+
+[contributor]: https://github.com/chrisgit/chef-summary_handlers/blob/master/CONTRIBUTING.md
+[conduct]: https://github.com/chrisgit/chef-summary_handlers/blob/master/CODE_OF_CONDUCT.md
