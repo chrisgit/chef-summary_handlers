@@ -96,14 +96,15 @@ Then add an include_recipe in default.rb (or one of the recipes used by your coo
 include_recipe 'summary_handlers
 ````
 
-
 Contributing
 ------------
 Please see [CONTRIBUTING.md][contributor] and read the [CODE_OF_CONDUCT.md][conduct]
 
 License and Authors
 -------------------
+Please see [LICENSE][licence]
 Authors: Chris Sullivan
 
 [contributor]: https://github.com/chrisgit/chef-summary_handlers/blob/master/CONTRIBUTING.md
 [conduct]: https://github.com/chrisgit/chef-summary_handlers/blob/master/CODE_OF_CONDUCT.md
+[licence]: https://github.com/chrisgit/chef-summary_handlers/blob/master/LICENSE

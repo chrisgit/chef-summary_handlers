@@ -1,7 +1,7 @@
 name             'summary_handlers'
 maintainer       'Chris Sullivan'
 maintainer_email 'n/a'
-license          'All rights reserved'
+license          'MIT'
 description      'Installs/Configures some handlers that summerise the Chef run in terms of Resource and Recipe'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.3.0'
