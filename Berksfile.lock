@@ -1,0 +1,12 @@
+DEPENDENCIES
+  summary_handlers
+    path: .
+    metadata: true
+  summary_handlers_test
+    path: test/fixtures/cookbooks/summary_handlers_test
+
+GRAPH
+  chef_handler (2.1.1)
+  summary_handlers (0.3.0)
+    chef_handler (>= 0.0.0)
+  summary_handlers_test (1.0.0)

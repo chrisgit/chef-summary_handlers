@@ -4,7 +4,7 @@ Resource Summary Report (by resource type)
 <% @data.each_pair do |resource_group, resources| %>
 <%= resource_group %>
 <% resources.each do |resource| %>
-<%= " %-9s %-45s" % [resource.updated ? '(updated)' : '', resource] %>
+<%= " %-9s %-45s" % [resource.updated ? '(updated)' : '   ...   ', resource] %>
 <% end %>
 
 <% end %>

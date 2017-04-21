@@ -53,7 +53,6 @@ module Handler
         @cookbook_collection[cookbook].metadata.version
       end
 
-      # Generate method is factory and also runs one of the generators?
       def generate
         template = ::File.join(File.dirname(__FILE__), 'Templates', 'cookbook_summary.erb')
         erb = ::Erubis::Eruby.new(File.read(template))

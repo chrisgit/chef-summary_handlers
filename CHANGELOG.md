@@ -3,6 +3,11 @@ summary-handlers CHANGELOG
 
 This file is used to list changes made in each version of the summary-handlers cookbook.
 
+0.3.0
+-----
+- [Chris Sullivan] - Updated due to https://blog.chef.io/2017/04/19/find-better-cookbooks-supermarket/
+  Added a sub cookbooks for test / example output.
+
 0.2.6
 -----
 - [Chris Sullivan] - Applied Rubocop rules to code
